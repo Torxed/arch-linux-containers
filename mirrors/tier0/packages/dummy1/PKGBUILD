@@ -1,0 +1,51 @@
+# Maintainer: David Runge <dvzrv@archlinux.org>
+# Maintainer: Giancarlo Razzolini <grazzolini@archlinux.org>
+# Contributor: Anton Hvornum <anton@hvornum.se>
+# Contributor: demostanis worlds <demostanis@protonmail.com>
+
+pkgname=dummy1
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A dummy package for testing a mirror"
+arch=(any)
+url="https://github.com/Torxed/arch-linux-containers"
+license=(GPL3)
+depends=(
+)
+makedepends=(
+  # 'devtools'
+  'gcc'
+  'binutils'
+  'fakeroot'
+  'sudo'
+)
+provides=(dummy1)
+conflicts=()
+replaces=()
+source=(
+  dummy1.c
+)
+sha512sums=('02fd84aae1b63cf237cf135eca30caf2855fbcb11c34b128c421636567704e6bd65bbf0c279f2cf471548f4b4dbb01a7b64bb274a42d43f1f35ec50b30ab3eaf')
+b2sums=('e39c44a6ab539f08abd8a0bee92d6827873b55da03956d9e647ccc0d99b2cadd9d6f223e220b6bb6953d92eb2040e753409dd0f6ee8f429c62ecebfba94d1f8a')
+validpgpkeys=()
+
+pkgver() {
+  echo $pkgver
+}
+
+prepare() {
+  echo "Nothing to prepare"
+}
+
+build() {
+  gcc dummy1.c -o dummy1
+  ls -l
+  echo "done"
+}
+
+package() {
+  echo "packaging"
+  ls -l
+#  install -vDm 644 dummy1 -t "$pkgdir/usr/bin/"
+#  echo "finished"
+}
