@@ -1,0 +1,41 @@
+version: '3.7'
+
+volumes:
+    mirror-packages:
+
+services:
+    mirror:
+        build:
+            context: .
+            dockerfile: ./DockerFiles/mirror/Dockerfile
+            # ulimits:
+            #     nproc: 65535
+            #     nofile:
+            #         soft: 65536
+            #         hard: 65536
+        ports:
+            - "8000:80"
+            - "4430:443"
+        networks:
+            default:
+                aliases:
+                    - tier0.archlinux.life
+
+        restart: always
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./DockerFiles/mirror/nginx/nginx.conf:/etc/nginx/nginx.conf"
+            - mirror-packages:/srv/http
+    rsync:
+        build:
+            context: .
+            dockerfile: ./DockerFiles/rsync/Dockerfile
+        volumes:
+            - "./DockerFiles/rsync/rsyncd.conf:/etc/rsync/rsyncd.conf"
+            - "./DockerFiles/rsync/share.list:/share.list"
+            - mirror-packages:/srv/http
+        ports:
+            - "873:873"
+        networks:
+            - default
+        restart: always

@@ -3,7 +3,7 @@
 FROM archlinux:latest
 
 # Install base packages for the mirror
-RUN pacman -Syu --noconfirm nginx rsync
+RUN pacman -Syu --noconfirm nginx
 
 # Create a build user for 'makepkg'
 RUN useradd --no-create-home --shell=/bin/nologin builder && usermod -L builder
