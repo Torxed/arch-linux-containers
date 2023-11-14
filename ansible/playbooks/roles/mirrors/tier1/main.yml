@@ -1,0 +1,38 @@
+- name: Create a network
+    community.docker.docker_network:
+        name: mirror-network
+
+- name: Remove all but selected list of containers
+    community.docker.docker_network:
+        name: mirror-network
+        connected:
+            - tier0-mirror
+            - tier1-mirror
+#           - tier2-mirror
+
+# ansible-playbook -i ./ansible/ mirrors.yml
+- name: Run Tier1 Mirror
+    # https://docs.docker.com/compose/compose-file/compose-file-v1/
+    hosts: localhost
+    gather_facts: false
+    tasks:
+        - name: Remove existing project
+            community.docker.docker_compose:
+                project_src: tier1-mirror
+                state: absent
+
+        - name: Start the mirror
+            community.docker.docker_compose:
+                project_name: tier1-mirror
+                definition: ../../../../docker/tier1/docker-compose.yml
+            register: output
+
+        - name: Show results
+            ansible.builtin.debug:
+                var: output
+
+        # - name: Verify that web and db services are running
+        #     ansible.builtin.assert:
+        #         that:
+        #             - "output.services.web.flask_web_1.state.running"
+        #             - "output.services.db.flask_db_1.state.running"

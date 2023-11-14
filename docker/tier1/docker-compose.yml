@@ -3,6 +3,11 @@ version: '3.7'
 volumes:
     mirror-packages:
 
+networks:
+    mirror-network:
+        name: mirror-network
+        external: true
+
 services:
     mirror:
         build:
@@ -17,7 +22,7 @@ services:
             - "8001:80"
             - "4431:443"
         networks:
-            default:
+            mirror-network:
                 aliases:
                     - tier1.archlinux.life
         restart: always
@@ -34,7 +39,7 @@ services:
             - "./DockerFiles/rsync/share.list:/share.list"
             - mirror-packages:/srv/http
         networks:
-            - default
+            mirror-network:
         restart: always
         environment:
             TIER0_HOST: tier0.archlinux.life

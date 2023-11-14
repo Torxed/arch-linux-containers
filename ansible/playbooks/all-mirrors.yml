@@ -1,0 +1,13 @@
+---
+
+- name: Create a tiered mirror setup
+  gather_facts: yes
+  hosts: all
+  become: yes
+  connection: local
+  roles:
+    - mirrors/tier0
+    - mirrors/tier1
+#    - mirrors/tier2
+
+...

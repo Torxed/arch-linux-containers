@@ -3,6 +3,11 @@ version: '3.7'
 volumes:
     mirror-packages:
 
+networks:
+    mirror-network:
+        name: mirror-network
+        external: true
+
 services:
     mirror:
         build:
@@ -17,7 +22,7 @@ services:
             - "8000:80"
             - "4430:443"
         networks:
-            default:
+            mirror-network:
                 aliases:
                     - tier0.archlinux.life
 
@@ -37,5 +42,5 @@ services:
         ports:
             - "873:873"
         networks:
-            - default
+            - mirror-network
         restart: always
