@@ -1,15 +1,15 @@
 version: '3.7'
 
 volumes:
-    mirror-packages:
+    mirror-t0-packages:
 
 networks:
-    mirror-network:
-        name: mirror-network
+    mirror-t0-network:
+        name: mirror-t0-network
         external: true
 
 services:
-    mirror:
+    mirror-tier0:
         build:
             context: .
             dockerfile: ./DockerFiles/mirror/Dockerfile
@@ -22,25 +22,24 @@ services:
             - "8000:80"
             - "4430:443"
         networks:
-            mirror-network:
+            mirror-t0-network:
                 aliases:
                     - tier0.archlinux.life
-
         restart: always
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "./DockerFiles/mirror/nginx/nginx.conf:/etc/nginx/nginx.conf"
-            - mirror-packages:/srv/http
-    rsync:
+            - mirror-t0-packages:/srv/http
+    rsync-tier0:
         build:
             context: .
             dockerfile: ./DockerFiles/rsync/Dockerfile
         volumes:
             - "./DockerFiles/rsync/rsyncd.conf:/etc/rsync/rsyncd.conf"
             - "./DockerFiles/rsync/share.list:/share.list"
-            - mirror-packages:/srv/http
+            - mirror-t0-packages:/srv/http
+        networks:
+            mirror-t0-network:
         ports:
             - "873:873"
-        networks:
-            - mirror-network
         restart: always

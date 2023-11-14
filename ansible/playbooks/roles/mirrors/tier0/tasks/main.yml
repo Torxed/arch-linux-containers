@@ -1,0 +1,16 @@
+---
+- name: Create Tier0 Network
+  community.docker.docker_network:
+    name: mirror-t0-network
+    state: present
+    internal: false
+    scope: global
+
+
+- name: Start the mirror
+  command: docker-compose -f /home/anton/github/arch-linux-containers/docker/tier0/docker-compose.yml up --remove-orphans -d
+  register: output
+
+- name: Show results
+  ansible.builtin.debug:
+    var: output
